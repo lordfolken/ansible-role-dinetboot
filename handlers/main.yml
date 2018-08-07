@@ -1,0 +1,8 @@
+---
+   - name: update-di
+     command: di-netboot-assistant -v rebuild-menu
+
+   - name: restart_dnsmasq
+     service:
+       name: dnsmasq
+       state: restarted

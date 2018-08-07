@@ -1,0 +1,9 @@
+dhcp-vendorclass=pxe,PXEClient
+dhcp-vendorclass=x86,PXEClient:Arch:00000
+
+#PXELinux' common options
+dhcp-option-force=208,f1:00:74:7e			#PXE signature
+#PXELinux on x86 arthitectures (both 32 and 64bits, i.e. i386 and amd64)
+dhcp-boot=net:pxe,di-netboot-pkg/images/{{ ansible_distribution_major_version }}/amd64/text/pxelinux.0
+dhcp-boot=net:x86,di-netboot-pkg/images/{{ ansible_distribution_major_version }}/i386/text/pxelinux.0
+log-dhcp
