@@ -2,7 +2,7 @@
 
 #TFTP root directory (for netboot).
 # You will have to adjust the directory according to the tftp server setting.
-TFTP_ROOT={{ tftp_dir }}
+TFTP_ROOT={{ ansible_role_dinetboot_tftp_dir }}
 
 #Download Mirror
 # The variable MIRROR_REGEXPS contain a list of space separated sed
