@@ -45,5 +45,4 @@
      path: "{{ ansible_role_dinetboot_tftp_dir }}/di-netboot-pkg/"
      fstype: auto
      opts: bind
-     state: mounted
    notify: update-di
