@@ -6,7 +6,7 @@
  - name: configure dnsmasq for booting
    template:
      src: di-netboot-assistant.j2
-     dest: /etc/dnsmasq.d/di-netboot-assistant
+     dest: /etc/dnsmasq.d/di-netboot-assistant.conf
    notify: restart_dnsmasq
 
  - name: di-netboot-assistant
