@@ -42,7 +42,7 @@
  - name: create bind mount for tftpdir
    mount:
      src: "/usr/lib/debian-installer/"
-     path: "{{ ansible_role_dinetboot_tftp_dir }}/di-netboot-pkg/"
+     name: "{{ ansible_role_dinetboot_tftp_dir }}/di-netboot-pkg/"
      fstype: auto
      opts: bind
      state: mounted
