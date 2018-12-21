@@ -1,0 +1,15 @@
+---
+ - name: install dnsmasq for tftp
+   package:
+     name: dnsmasq
+
+ - name: di-netboot-assistant
+   package:
+     name: "{{ item }}"
+   with_items:
+    - di-netboot-assistant
+    - "debian-installer-{{ ansible_distribution_major_version }}-netboot-amd64"
+    - "debian-installer-{{ ansible_distribution_major_version }}-netboot-i386"
+    - "debian-installer-{{ ansible_distribution_major_version }}-netboot-armel"
+    - "debian-installer-{{ ansible_distribution_major_version }}-netboot-armhf"
+   notify: update_di

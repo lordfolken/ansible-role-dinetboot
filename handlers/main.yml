@@ -1,8 +1,6 @@
 ---
-   - name: update-di
-     command: di-netboot-assistant -v rebuild-menu
+- name: mount_di
+  command: 'mount "{{ ansible_role_dinetboot_tftp_dir }}/di-netboot-pkg/"'
 
-   - name: restart_dnsmasq
-     service:
-       name: dnsmasq
-       state: restarted
+- name: update_di
+  command: /usr/bin/di-netboot-assistant rebuild-menu

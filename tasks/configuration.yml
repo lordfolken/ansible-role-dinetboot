@@ -1,0 +1,34 @@
+---
+ - name: configure dnsmasq for booting
+   template:
+     src: di-netboot-assistant.j2
+     dest: /etc/dnsmasq.d/di-netboot-assistant.conf
+   notify: restart_dnsmasq
+
+ - name: copy di-netboot-assistant files
+   copy:
+     src: "{{ item }}"
+     dest: "/etc/di-netboot-assistant"
+   with_items:
+    - di-sources.list
+   notify: update_di
+
+ - name: template di-netboot-assistant.conf
+   template:
+     src: di-netboot-assistant.conf.j2
+     dest: /etc/di-netboot-assistant/di-netboot-assistant.conf
+   notify: update_di
+
+ - name: remove weekly cronjob
+   file:
+     dest: "/etc/cron.weekly/di-netboot-assistant"
+     state: absent
+
+ - name: create bind mount for tftpdir
+   mount:
+     src: "/usr/lib/debian-installer/"
+     name: "{{ ansible_role_dinetboot_tftp_dir }}/di-netboot-pkg/"
+     fstype: auto
+     opts: bind
+     state: present
+   notify: mount_di

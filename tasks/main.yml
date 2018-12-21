@@ -1,49 +1,31 @@
 ---
- - name: install dnsmasq for tftp
-   package:
-     name: dnsmasq
+- name: include os specific vars
+  include_vars: '{{ item }}'
+  with_first_found:
+    - files:
+      - '{{ ansible_distribution }}_{{ ansible_distribution_major_version }}.yml'
+      - '{{ ansible_os_family }}.yml'
+      skip: true
+  tags:
+    - 'role::$ROLENAME'
+    - 'role::$ROLENAME:install'
+    - 'role::$ROLENAME:config'
 
- - name: configure dnsmasq for booting
-   template:
-     src: di-netboot-assistant.j2
-     dest: /etc/dnsmasq.d/di-netboot-assistant.conf
-   notify: restart_dnsmasq
+- nane: include os specific prerequisite tasks
+  include: '{{ item }}'
+  with_first_found:
+    - files: 
+      - '{{ ansible_distribution }}_{{ ansible_distribution_major_version }}.yml'
+      - '{{ ansible_os_family }}.yml'
+      skip: true
 
- - name: di-netboot-assistant
-   apt:
-     pkg: "{{ item }}"
-   with_items:
-    - di-netboot-assistant
-    - "debian-installer-{{ ansible_distribution_major_version }}-netboot-amd64"
-    - "debian-installer-{{ ansible_distribution_major_version }}-netboot-i386"
-    - "debian-installer-{{ ansible_distribution_major_version }}-netboot-armel"
-    - "debian-installer-{{ ansible_distribution_major_version }}-netboot-armhf"
-   notify: update-di
+- include: installation.yml
+  tags:
+    - 'role::$ROLENAME'
+    - 'role::$ROLENAME:install'
 
- - name: copy di-netboot-assistant files
-   copy:
-     src: "{{ item }}"
-     dest: "/etc/di-netboot-assistant"
-   with_items:
-    - di-sources.list
-   notify: update-di
+- include: configuration.yml
+  tags:
+    - 'role::$ROLENAME'
+    - 'role::$ROLENAME:config'
 
- - name: template di-netboot-assistant.conf
-   template:
-     src: di-netboot-assistant.conf.j2
-     dest: /etc/di-netboot-assistant/di-netboot-assistant.conf
-   notify: update-di
-
- - name: remove weekly cronjob
-   file:
-     dest: "/etc/cron.weekly/di-netboot-assistant"
-     state: absent
-
- - name: create bind mount for tftpdir
-   mount:
-     src: "/usr/lib/debian-installer/"
-     name: "{{ ansible_role_dinetboot_tftp_dir }}/di-netboot-pkg/"
-     fstype: auto
-     opts: bind
-     state: mounted
-   notify: update-di

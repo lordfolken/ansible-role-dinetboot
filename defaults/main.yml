@@ -1,1 +1,2 @@
-ansible_role_dinetboot_tftp_dir: /srv/tftp
+---
+# defaults file for .
